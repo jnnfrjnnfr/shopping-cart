@@ -126,9 +126,9 @@ const Products = (props) => {
 
     return (
       <li key={index}>
-        <Image src={photos[index % 4]} width={70} roundedCircle></Image>
+        <Image src={uhit} width={70} roundedCircle></Image>
         <Button variant="primary" size="large">
-          {item.name}:{item.cost}
+          {item.name}:${item.cost}-Stock={item.instock}
         </Button>
         <input name={item.name} type="submit" onClick={addToCart}></input>
       </li>
@@ -136,15 +136,21 @@ const Products = (props) => {
   });
   let cartList = cart.map((item, index) => {
     return (
-      <Accordion.Item key={1+index} eventKey={1 + index}>
-      <Accordion.Header>
-        {item.name}
-      </Accordion.Header>
-      <Accordion.Body onClick={() => deleteCartItem(index)}
-        eventKey={1 + index}>
-        $ {item.cost} from {item.country}
-      </Accordion.Body>
-    </Accordion.Item>
+      <Card key={index}>
+        <Card.Header>
+          <Accordion.Toggle as={Button} variant="link" eventKey={1 + index}>
+            {item.name}
+          </Accordion.Toggle>
+        </Card.Header>
+        <Accordion.Collapse
+          onClick={() => deleteCartItem(index)}
+          eventKey={1 + index}
+        >
+          <Card.Body>
+            $ {item.cost} from {item.country}
+          </Card.Body>
+        </Accordion.Collapse>
+      </Card>
     );
   });
 
@@ -170,9 +176,9 @@ const Products = (props) => {
   // Implement the restockProducts function
   const restockProducts = (url) => {
     doFetch(url);
-    // var data = data;
+    
     let newItems = data.map((item) => {
-      let { name, country, cost, instock } = item.attributes;
+      let { name, country, cost, instock } = item;
       return { name, country, cost, instock };
     });
     
@@ -188,7 +194,7 @@ const Products = (props) => {
         </Col>
         <Col>
           <h1>Cart Contents</h1>
-          <Accordion defaultActiveKey="0">{cartList}</Accordion>
+          <Accordion>{cartList}</Accordion>
         </Col>
         <Col>
           <h1>CheckOut </h1>
